@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ECUST-XX/xml"
+	"github.com/facefunk/xml"
 )
 
 func ExampleMarshalIndent() {

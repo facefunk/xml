@@ -9,7 +9,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/ECUST-XX/xml"
+	"github.com/facefunk/xml"
 )
 
 type Animal int

@@ -10,7 +10,7 @@ e.g.
 
 # How to get
 ```
-go get github.com/ECUST-XX/xml
+go get github.com/facefunk/xml
 ```
 # Usage
 
@@ -24,14 +24,14 @@ xml.MarshalIndent(v, "  ", "    ")
 with
 
 ```go
-import "github.com/ECUST-XX/xml"
+import "github.com/facefunk/xml"
 xml.MarshalIndentShortForm(v, "  ", "    ")
 ```
 
 or
 
 ```go
-import "github.com/ECUST-XX/xml"
+import "github.com/facefunk/xml"
 enc := xml.NewEncoder(os.Stdout)
 enc.Indent("  ", "    ")
 enc.ShortForm()

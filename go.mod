@@ -1,3 +1,3 @@
-module github.com/ECUST-XX/xml
+module github.com/facefunk/xml
 
 go 1.20

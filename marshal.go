@@ -172,8 +172,19 @@ func NewEncoder(w io.Writer) *Encoder {
 	return e
 }
 
-func (enc *Encoder) ShortForm() {
+// ShortForm sets the encoder to generate XML in which empty elements are rendered with
+// self-closing tags, <br /> as opposed to <br></br>.
+// A space before the trailing slash of self-closing tags, <br /> as opposed to <br/>, is
+// recommended by https://www.w3.org/TR/xhtml1/#C_2 but is not actually part of the XML spec.
+// to disable the insertion of this extra space pass excludeSpace = true.
+func (enc *Encoder) ShortForm(excludeSpace ...bool) {
 	enc.p.shortForm = true
+
+	var exclude bool
+	if len(excludeSpace) > 0 {
+		exclude = excludeSpace[0]
+	}
+	enc.p.incSpace = !exclude
 }
 
 // Indent sets the encoder to generate XML in which each element
@@ -344,6 +355,7 @@ type printer struct {
 	encoder    *Encoder
 	seq        int
 	shortForm  bool
+	incSpace   bool
 	indent     string
 	prefix     string
 	depth      int
@@ -835,7 +847,10 @@ func (p *printer) writeStart(start *StartElement, selfClosing bool) error {
 	}
 
 	if selfClosing && p.shortForm {
-		p.WriteString(" />")
+		if p.incSpace {
+			p.WriteByte(' ')
+		}
+		p.WriteString("/>")
 		p.writeIndent(-1)
 		p.popPrefix()
 		p.tags = p.tags[:len(p.tags)-1]

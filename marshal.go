@@ -187,6 +187,12 @@ func (enc *Encoder) ShortForm(excludeSpace ...bool) {
 	enc.p.incSpace = !exclude
 }
 
+// RawPrefix sets the encoder to write attribute name spaces verbatim. No xmlns attributes will be
+// automatically inserted.
+func (enc *Encoder) RawPrefix() {
+	enc.p.rawPrefix = true
+}
+
 // Indent sets the encoder to generate XML in which each element
 // begins on a new indented line that starts with prefix and is followed by
 // one or more copies of indent according to the nesting depth.
@@ -356,6 +362,7 @@ type printer struct {
 	seq        int
 	shortForm  bool
 	incSpace   bool
+	rawPrefix  bool
 	indent     string
 	prefix     string
 	depth      int
@@ -837,7 +844,11 @@ func (p *printer) writeStart(start *StartElement, selfClosing bool) error {
 		}
 		p.WriteByte(' ')
 		if name.Space != "" {
-			p.WriteString(p.createAttrPrefix(name.Space))
+			if p.rawPrefix {
+				p.WriteString(name.Space)
+			} else {
+				p.WriteString(p.createAttrPrefix(name.Space))
+			}
 			p.WriteByte(':')
 		}
 		p.WriteString(name.Local)

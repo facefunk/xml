@@ -197,6 +197,10 @@ type Decoder struct {
 	// the attribute xmlns="DefaultSpace".
 	DefaultSpace string
 
+	// DisableSpaceTranslation, if true, disables name space translation, all name space prefixes
+	// will be decoded verbatim.
+	DisableSpaceTranslation bool
+
 	r              io.ByteReader
 	t              TokenReader
 	buf            bytes.Buffer
@@ -340,6 +344,9 @@ const (
 // The default name space (for Space=="")
 // applies only to element names, not to attribute names.
 func (d *Decoder) translate(n *Name, isElementName bool) {
+	if d.DisableSpaceTranslation {
+		return
+	}
 	switch {
 	case n.Space == xmlnsPrefix:
 		return
